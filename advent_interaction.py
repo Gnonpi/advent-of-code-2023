@@ -4,11 +4,12 @@ from dotenv import load_dotenv
 from loguru import logger
 import httpx
 
-ENV_PATH = Path(__file__).parent.joinpath(".env")
+ENV_PATH = Path().parent.joinpath(".env")
 ENV_ADVENT_COOKIE = "ADVENT_COOKIE"
 
 
 def load_advent_cookie() -> str:
+    logger.debug(f"Loading env from '{ENV_PATH}'")
     load_dotenv(ENV_PATH)
     return os.environ[ENV_ADVENT_COOKIE]
 
