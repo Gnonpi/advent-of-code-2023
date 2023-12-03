@@ -39,17 +39,12 @@ def list_contain_symbol(adjacents: set[str]) -> bool:
 def number_positions_in_line(line: str) -> list[tuple[int, int, int]]:
     result = []
     for match in RE_NUMBER_IN_LINE.finditer(line):
-        result.append(
-            (int(match.group(0)), match.start(), match.end())
-        )
+        result.append((int(match.group(0)), match.start(), match.end()))
     return result
 
 
 def adjacents_to_number(
-    grid: list[str],
-    line_no: int,
-    number_pos_start: int,
-    number_pos_end: int
+    grid: list[str], line_no: int, number_pos_start: int, number_pos_end: int
 ) -> set[str]:
     start_lookup = max(number_pos_start - 1, 0)
     end_lookup = min(number_pos_end + 1, len(grid[0]))
@@ -74,7 +69,9 @@ def solve_part_1(input_string: str) -> int:
     for line_no, line in enumerate(grid):
         number_positions = number_positions_in_line(line)
         for value, number_pos_start, number_pos_end in number_positions:
-            adjacents = adjacents_to_number(grid, line_no, number_pos_start, number_pos_end)
+            adjacents = adjacents_to_number(
+                grid, line_no, number_pos_start, number_pos_end
+            )
             if list_contain_symbol(adjacents):
                 result += value
     return result
@@ -83,13 +80,13 @@ def solve_part_1(input_string: str) -> int:
 def gear_positions_in_line(line: str) -> list[int]:
     result = []
     for match in RE_GEAR_IN_LINE.finditer(line):
-        result.append(
-            match.start()
-        )
+        result.append(match.start())
     return result
 
 
-def find_numbers_around_gear_line(grid: list[str], line_no: int) -> list[NumberPosition]:
+def find_numbers_around_gear_line(
+    grid: list[str], line_no: int
+) -> list[NumberPosition]:
     line = grid[line_no]
     examined_lines = [(line_no, line)]
     if line_no - 1 >= 0:
@@ -99,14 +96,23 @@ def find_numbers_around_gear_line(grid: list[str], line_no: int) -> list[NumberP
 
     number_positions = []
     for examined_line_no, examined_line in examined_lines:
-        for value, number_pos_start, number_pos_end in number_positions_in_line(examined_line):
+        for value, number_pos_start, number_pos_end in number_positions_in_line(
+            examined_line
+        ):
             number_positions.append(
-                NumberPosition(value=value, line_no=examined_line_no, start=number_pos_start, end=number_pos_end)
+                NumberPosition(
+                    value=value,
+                    line_no=examined_line_no,
+                    start=number_pos_start,
+                    end=number_pos_end,
+                )
             )
     return number_positions
 
 
-def coords_around_gear_position(grid: list[str], gear_x: int, gear_y: int) -> set[tuple[int, int]]:
+def coords_around_gear_position(
+    grid: list[str], gear_x: int, gear_y: int
+) -> set[tuple[int, int]]:
     min_x = max(0, gear_x - 1)
     max_x = min(len(grid[0]), gear_x + 1)
     min_y = max(0, gear_y - 1)
@@ -119,7 +125,9 @@ def coords_around_gear_position(grid: list[str], gear_x: int, gear_y: int) -> se
     return adjacent_pos
 
 
-def filter_numbers_adjacent_to(grid: list[str], gear_x: int, gear_y: int, number_positions: list[NumberPosition]) -> list[NumberPosition]:
+def filter_numbers_adjacent_to(
+    grid: list[str], gear_x: int, gear_y: int, number_positions: list[NumberPosition]
+) -> list[NumberPosition]:
     assert grid[gear_y][gear_x] == "*"
     adjacent_coords = coords_around_gear_position(grid, gear_x, gear_y)
     filtered = []
@@ -135,9 +143,11 @@ def solve_part_2(input_string: str) -> int:
     for line_no, line in enumerate(grid):
         for gear_pos in gear_positions_in_line(line):
             number_in_lines = find_numbers_around_gear_line(grid, line_no)
-            adjacent_numbers = filter_numbers_adjacent_to(grid, gear_pos, line_no, number_in_lines)
+            adjacent_numbers = filter_numbers_adjacent_to(
+                grid, gear_pos, line_no, number_in_lines
+            )
             if len(adjacent_numbers) == 2:
-                result += (adjacent_numbers[0].value * adjacent_numbers[1].value)
+                result += adjacent_numbers[0].value * adjacent_numbers[1].value
     return result
 
 

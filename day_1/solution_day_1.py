@@ -13,10 +13,7 @@ NUMBER_WORDS = [
     "eight",
     "nine",
 ]
-RE_NUMBER_WORDS = {
-    word: re.compile(word)
-    for word in NUMBER_WORDS
-}
+RE_NUMBER_WORDS = {word: re.compile(word) for word in NUMBER_WORDS}
 
 
 def solve_part_1(input_string: str) -> int:
@@ -30,6 +27,8 @@ def solve_part_1(input_string: str) -> int:
                 if first_number is None:
                     first_number = char_num
                 second_number = char_num
+        assert first_number is not None
+        assert second_number is not None
         result += first_number * 10 + second_number
     return result
 

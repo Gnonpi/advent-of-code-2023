@@ -4,7 +4,10 @@ from day_3.solution_day_3 import (
     solve_part_2,
     parse_grid,
     number_positions_in_line,
-    adjacents_to_number, find_numbers_around_gear_line, NumberPosition, coords_around_gear_position,
+    adjacents_to_number,
+    find_numbers_around_gear_line,
+    NumberPosition,
+    coords_around_gear_position,
     filter_numbers_adjacent_to,
 )
 
@@ -91,12 +94,10 @@ def test_coords_around_gear_position():
 
 def test_filter_numbers_adjacent_to():
     number_positions = find_numbers_around_gear_line(parse_grid(sample), 1)
-    filtered_numbers = filter_numbers_adjacent_to(parse_grid(sample), 3, 1, number_positions)
-    expected = [
-        number
-        for number in number_positions
-        if number.value in {467, 35}
-    ]
+    filtered_numbers = filter_numbers_adjacent_to(
+        parse_grid(sample), 3, 1, number_positions
+    )
+    expected = [number for number in number_positions if number.value in {467, 35}]
     assert filtered_numbers == expected
 
 

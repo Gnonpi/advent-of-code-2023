@@ -24,10 +24,7 @@ def _build_stored_path(day: int) -> Path:
 
 def _get_input_from_website(day: int) -> Path:
     response = httpx.get(
-        _build_problem_url(day),
-        headers={
-            "Cookie": load_advent_cookie()
-        }
+        _build_problem_url(day), headers={"Cookie": load_advent_cookie()}
     )
     data_path = _build_stored_path(day)
     with open(data_path, "w") as f:
