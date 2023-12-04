@@ -5,8 +5,7 @@ from day_4.solution_day_4 import (
     solve_part_1,
     parse_line,
     GameLine,
-    count_winning_numbers,
-    compute_score_from_winning,
+    solve_part_2,
 )
 
 SAMPLE = """Card 1: 41 48 83 86 17 | 83 86  6 31 17  9 48 53
@@ -42,8 +41,7 @@ def test_parse_line():
 )
 def test_compute_score_from_line(line, expected):
     game_line = parse_line(line)
-    winning = count_winning_numbers(game_line)
-    assert compute_score_from_winning(winning) == expected
+    assert game_line.compute_card_score() == expected
 
 
 class TestPart1:
@@ -55,3 +53,14 @@ class TestPart1:
         input_string = get_problem_input(4)
         accepted_value = 32001
         assert solve_part_1(input_string) == accepted_value
+
+
+class TestPart2:
+    def test_solve_sample(self):
+        expected = 30
+        assert solve_part_2(SAMPLE) == expected
+
+    def test_solve_real_problem(self):
+        input_string = get_problem_input(4)
+        accepted_value = 5037841
+        assert solve_part_2(input_string) == accepted_value

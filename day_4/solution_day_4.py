@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 from loguru import logger
 from pydantic import BaseModel
 
@@ -8,6 +10,25 @@ class GameLine(BaseModel):
     number: int
     left: list[int]
     right: list[int]
+    matching: int = 0
+    score: int = 0
+
+    def count_winning_numbers(self) -> int:
+        set_left = set(self.left)
+        set_right = set(self.right)
+        return len(set_left & set_right)
+
+    @staticmethod
+    def compute_score_from_winning(winning: int) -> int:
+        if winning == 0:
+            return 0
+        return 2 ** (winning - 1)
+
+    def compute_card_score(self) -> int:
+        winning = self.count_winning_numbers()
+        self.matching = winning
+        self.score = GameLine.compute_score_from_winning(winning)
+        return self.score
 
 
 def parse_row(row: str) -> list[int]:
@@ -17,18 +38,6 @@ def parse_row(row: str) -> list[int]:
             continue
         row_numbers.append(int(number.strip()))
     return row_numbers
-
-
-def count_winning_numbers(game_line: GameLine) -> int:
-    set_left = set(game_line.left)
-    set_right = set(game_line.right)
-    return len(set_left & set_right)
-
-
-def compute_score_from_winning(winning: int) -> int:
-    if winning == 0:
-        return 0
-    return 2 ** (winning - 1)
 
 
 def parse_line(line: str) -> GameLine:
@@ -48,13 +57,29 @@ def solve_part_1(input_string: str) -> int:
         if line == "":
             continue
         game_line = parse_line(line)
-        winning = count_winning_numbers(game_line)
-        result += compute_score_from_winning(winning)
+        result += game_line.compute_card_score()
     return result
 
 
 def solve_part_2(input_string: str) -> int:
-    raise NotImplementedError
+    game_lines = []
+    for line in input_string.splitlines():
+        if line == "":
+            continue
+        game_line = parse_line(line)
+        game_line.compute_card_score()
+        game_lines.append(game_line)
+
+    instance_records: dict[int, int] = defaultdict(int)
+    for game_line in game_lines:
+        # logger.debug(f"Processing {game_line.number} - {game_line.matching}")
+        instance_records[game_line.number] += 1
+        # logger.debug(f"Duplicating {instance_records[game_line.number]} times")
+        for number_instances in range(instance_records[game_line.number]):
+            for shift_matching in range(game_line.matching):
+                # logger.debug(f"Increase instance of {game_line.number + shift_matching}")
+                instance_records[game_line.number + shift_matching + 1] += 1
+    return sum(instance_records.values())
 
 
 def main():
