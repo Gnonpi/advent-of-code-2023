@@ -7,19 +7,20 @@ def load_sample() -> str:
     sample_path = Path(__file__).parent / "sample-day-5"
     return open(sample_path).read()
 
+
 def test_parse_sample():
     seeds, map_mapping = parse_input(load_sample())
     expected_seeds = [79, 14, 55, 13]
     assert seeds == expected_seeds
     assert isinstance(map_mapping, dict)
     expected_keys = {
-        "seed", 
-        "soil", 
-        "fertilizer", 
-        "water", 
-        "light", 
-        "temperature", 
-        "humidity", 
+        "seed",
+        "soil",
+        "fertilizer",
+        "water",
+        "light",
+        "temperature",
+        "humidity",
         # "location",
     }
     assert set(map_mapping.keys()) == expected_keys
@@ -67,6 +68,7 @@ def test_chain_processed():
     dest, current_nums = map_mapping[dest].process_incoming(current_nums)
     expected = [78, 43, 82, 35]
     assert dest == "humidity"
+    assert current_nums == expected
 
 
 class TestPart1:
@@ -77,7 +79,5 @@ class TestPart1:
 
     def test_solve_real_problem(self):
         input_string = get_problem_input(5)
-        expected = None
+        expected = 318728750
         assert solve_part_1(input_string) == expected
-
-        assert False

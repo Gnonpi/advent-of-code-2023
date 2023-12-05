@@ -22,7 +22,6 @@ class RangeMapping(BaseModel):
             return incoming_num
         shift_incoming_num = self.destination_range_start - self.source_range_start
         return incoming_num + shift_incoming_num
-        
 
 
 class GardenMapping(BaseModel):
@@ -39,14 +38,11 @@ class GardenMapping(BaseModel):
                 return new_num
         return incoming_num
 
-
     def process_incoming(self, incoming: list[int]) -> tuple[str, list[int]]:
         logger.debug(f"Processing {self}")
         output = []
         for num in incoming:
-            output.append(
-                self._go_through_ranges(num)
-            )
+            output.append(self._go_through_ranges(num))
         return self.destination_name, output
 
 
@@ -60,6 +56,7 @@ def parse_input(input_string: str) -> tuple[list[int], dict[str, GardenMapping]]
     for block in block_split:
         map_descr, *ranges = block.splitlines()
         matched = RE_MAP_NAME.search(map_descr)
+        assert matched is not None
         source_name = matched.groupdict()["source"]
         dest_name = matched.groupdict()["dest"]
         current_ranges = []
@@ -69,7 +66,7 @@ def parse_input(input_string: str) -> tuple[list[int], dict[str, GardenMapping]]
                 RangeMapping(
                     source_range_start=source_start,
                     destination_range_start=dest_start,
-                    range_length=range_length
+                    range_length=range_length,
                 )
             )
         parsed[source_name] = GardenMapping(
@@ -92,8 +89,10 @@ def solve_part_1(input_string: str) -> int:
     _, current_ranges = dest_map.process_incoming(current_ranges)
     return min(current_ranges)
 
+
 def solve_part_2(input_string: str) -> int:
     raise NotImplementedError
+
 
 def main():
     logger.remove()
