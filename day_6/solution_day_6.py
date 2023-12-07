@@ -51,8 +51,16 @@ def solve_part_1(input_string: str) -> int:
     return result
 
 
+def parse_part_two(input_string: str) -> tuple[int, int]:
+    lines = input_string.splitlines()
+    total_time = int(lines[0].replace("Time: ", "").strip().replace(" ", ""))
+    total_distance = int(lines[1].replace("Distance:", "").strip().replace(" ", ""))
+    return total_time, total_distance
+
+
 def solve_part_2(input_string: str) -> int:
-    raise NotImplementedError
+    limit_time, distance = parse_part_two(input_string)
+    return compute_ways_to_win_race(limit_time, distance)
 
 
 def main():

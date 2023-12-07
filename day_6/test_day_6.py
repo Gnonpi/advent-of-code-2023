@@ -6,6 +6,7 @@ from day_6.solution_day_6 import (
     solve_part_2,
     parse_problem,
     compute_ways_to_win_race,
+    parse_part_two,
 )
 
 SAMPLE = """Time:      7  15   30
@@ -40,12 +41,16 @@ class TestPart1:
         assert solve_part_1(input_string) == accepted_value
 
 
+def test_parse_part_two():
+    assert parse_part_two(SAMPLE) == (71530, 940200)
+
+
 class TestPart2:
     def test_solve_sample(self):
-        expected = None
+        expected = 71503
         assert solve_part_2(SAMPLE) == expected
 
     def test_solve_real_problem(self):
         input_string = get_problem_input(6)
-        accepted_value = None
+        accepted_value = 45128024
         assert solve_part_2(input_string) == accepted_value
