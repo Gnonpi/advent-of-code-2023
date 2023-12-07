@@ -39,3 +39,14 @@ def get_problem_input(day: int) -> str:
         _get_input_from_website(day)
     with open(data_path, "r") as f:
         return f.read()
+
+
+class Tools:
+    @staticmethod
+    def read_line_header_and_numbers(line: str) -> tuple[str, list[int]]:
+        header, numbers = line.split(":")
+        return header.strip(), Tools.split_space_separated_numbers(numbers.strip())
+
+    @staticmethod
+    def split_space_separated_numbers(line: str) -> list[int]:
+        return [int(num) for num in line.split(" ") if num != ""]
